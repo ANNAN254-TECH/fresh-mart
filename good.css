@@ -1,0 +1,411 @@
+/* FreshMart products page */
+:root{
+  --ink:#17261c;
+  --muted:#5d6b61;
+  --leaf:#1f6b3a;
+  --leaf-d:#154d2a;
+  --sun:#f2b632;
+  --paper:#f6f8f4;
+  --card:#ffffff;
+  --tile:#eaf1e6;
+  --line:#dfe6dc;
+  --red:#b3261e;
+  --radius:14px;
+  --shadow:0 1px 2px rgba(23,38,28,.06),0 4px 14px rgba(23,38,28,.06);
+  --shadow-hover:0 2px 4px rgba(23,38,28,.08),0 10px 24px rgba(23,38,28,.12);
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:80px}
+body{
+  margin:0;
+  font:400 16px/1.55 "Figtree",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+  background:var(--paper);
+  color:var(--ink);
+  -webkit-font-smoothing:antialiased;
+}
+img{max-width:100%;display:block}
+a{color:inherit}
+
+/* Layout */
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+
+/* Header */
+header{
+  background:var(--leaf-d);
+  color:#fff;
+  position:relative;
+  box-shadow:0 2px 8px rgba(0,0,0,.15);
+}
+header .wrap{display:flex;align-items:center;justify-content:space-between;height:64px}
+header a{color:#fff;text-decoration:none}
+header a:hover{text-decoration:underline;text-underline-offset:4px}
+.brand{
+  font:800 24px/1 "Bricolage Grotesque","Figtree",system-ui,sans-serif;
+  letter-spacing:-.01em;
+}
+.brand:hover{text-decoration:none!important}
+header .wrap > a:last-child{
+  font-weight:600;
+  font-size:15px;
+  padding:9px 16px;
+  border:1.5px solid rgba(255,255,255,.55);
+  border-radius:999px;
+}
+header .wrap > a:last-child:hover{background:#fff;color:var(--leaf-d);text-decoration:none}
+
+/* Page title */
+h1{
+  font:800 clamp(30px,5vw,46px)/1.1 "Bricolage Grotesque","Figtree",system-ui,sans-serif;
+  letter-spacing:-.02em;
+  margin:36px 0 8px;
+}
+.lead{color:var(--muted);font-size:17px;max-width:62ch;margin:0 0 22px}
+
+/* Category menu */
+nav{
+  position:sticky;top:0;z-index:20;
+  display:flex;gap:8px;
+  overflow-x:auto;
+  padding:12px 0;
+  margin-bottom:6px;
+  background:var(--paper);
+  border-bottom:1px solid var(--line);
+  scrollbar-width:none;
+}
+nav::-webkit-scrollbar{display:none}
+nav a{
+  flex:none;
+  padding:9px 16px;
+  border:1px solid var(--line);
+  border-radius:999px;
+  background:var(--card);
+  color:var(--ink);
+  text-decoration:none;
+  font-weight:500;
+  font-size:14px;
+  transition:background .15s,color .15s,border-color .15s;
+}
+nav a:hover{background:var(--leaf);border-color:var(--leaf);color:#fff}
+
+/* Category headings */
+h2{
+  font:800 24px/1.2 "Bricolage Grotesque","Figtree",system-ui,sans-serif;
+  letter-spacing:-.01em;
+  margin:40px 0 16px;
+  padding-left:12px;
+  border-left:5px solid var(--sun);
+}
+
+/* Product grid */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(210px,1fr));
+  gap:18px;
+}
+
+/* Product card */
+.card{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  box-shadow:var(--shadow);
+  transition:transform .18s ease,box-shadow .18s ease;
+}
+/* ============================================================
+   BASKET DRAWER
+   ============================================================ */
+
+/* Dark overlay behind the basket */
+.scrim{
+  position:fixed;inset:0;
+  background:rgba(14,26,18,.55);
+  backdrop-filter:blur(2px);
+  opacity:0;visibility:hidden;
+  transition:opacity .25s ease,visibility .25s ease;
+  z-index:90;
+}
+.scrim.open{opacity:1;visibility:visible}
+
+/* The basket panel */
+.drawer{
+  position:fixed;top:0;right:0;bottom:0;
+  width:min(440px,100%);
+  display:flex;flex-direction:column;
+  background:var(--card,#fff);
+  box-shadow:-12px 0 40px rgba(0,0,0,.22);
+  transform:translateX(100%);
+  visibility:hidden;
+  transition:transform .3s cubic-bezier(.2,.8,.2,1),visibility .3s;
+  z-index:100;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+.drawer.open{transform:translateX(0);visibility:visible}
+
+/* Header */
+.drawer .dh{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:18px 22px;
+  background:#0e3a1e;color:#fff;
+  flex:none;
+}
+.drawer .dh h2{font-size:21px;font-weight:800;color:#fff}
+.drawer .x{
+  width:38px;height:38px;
+  display:grid;place-items:center;
+  border:0;border-radius:50%;
+  background:rgba(255,255,255,.14);color:#fff;
+  font-size:26px;line-height:1;cursor:pointer;
+  transition:background .15s,transform .15s;
+}
+.drawer .x:hover{background:rgba(255,255,255,.28);transform:rotate(90deg)}
+
+/* Scrollable list of items */
+#lines{
+  flex:1;
+  overflow-y:auto;
+  padding:8px 22px;
+  overscroll-behavior:contain;
+}
+
+/* One basket item */
+.cart-item{
+  display:grid;
+  grid-template-columns:68px 1fr auto;
+  gap:14px;
+  align-items:center;
+  padding:16px 0;
+  border-bottom:1px solid var(--line,#dfe6dc);
+}
+.cart-item:last-child{border-bottom:0}
+.cart-item img{
+  width:68px;height:68px;
+  object-fit:cover;
+  border-radius:12px;
+  background:var(--tile,#eaf1e6);
+}
+.cart-details h4{
+  margin:0 0 2px;
+  font:600 16px/1.3 var(--text);
+  color:var(--ink,#17261c);
+}
+.cart-details p{
+  font-size:14px;
+  color:var(--muted,#5d6b61);
+  margin-bottom:8px;
+}
+.cart-item > strong{
+  font:800 17px/1 var(--display);
+  color:#0e3a1e;
+  white-space:nowrap;
+  align-self:start;
+  padding-top:2px;
+}
+
+/* Quantity buttons  -  [ - 2 + ] */
+.quantity-controls{
+  display:inline-flex;align-items:center;
+  border:1px solid var(--line,#dfe6dc);
+  border-radius:999px;
+  background:var(--paper,#f6f8f4);
+  overflow:hidden;
+}
+.quantity-controls button{
+  width:34px;height:32px;
+  border:0;background:transparent;
+  font-size:18px;font-weight:600;
+  color:#0e3a1e;cursor:pointer;
+  transition:background .15s;
+}
+.quantity-controls button:hover{background:#dcebd8}
+.quantity-controls button:active{background:#c9dfc3}
+.quantity-controls span{
+  min-width:30px;text-align:center;
+  font-weight:600;font-size:15px;
+}
+
+/* Empty basket message */
+.empty-cart{
+  text-align:center;
+  padding:64px 20px;
+  color:var(--muted,#5d6b61);
+}
+.empty-cart h3{color:var(--ink,#17261c);font-size:20px;margin:10px 0 6px}
+
+/* Total line */
+.drawer .sum{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:16px 22px;
+  background:var(--tile,#eaf1e6);
+  border-top:1px solid var(--line,#dfe6dc);
+  font:600 17px/1 var(--text);
+  flex:none;
+}
+.drawer .sum span:last-child{
+  font:800 24px/1 var(--display);
+  color:#0e3a1e;
+}
+
+/* Checkout form */
+.drawer .form{
+  display:grid;gap:10px;
+  padding:16px 22px 12px;
+  flex:none;
+}
+.drawer .form input,
+.drawer .form select{
+  width:100%;
+  padding:13px 14px;
+  border:1.5px solid var(--line,#dfe6dc);
+  border-radius:10px;
+  background:#fff;
+  font-size:16px;           /* 16px stops iPhone zooming in */
+  color:var(--ink,#17261c);
+  transition:border-color .15s,box-shadow .15s;
+}
+.drawer .form input:focus,
+.drawer .form select:focus{
+  outline:0;
+  border-color:#16834a;
+  box-shadow:0 0 0 3px rgba(22,131,74,.18);
+}
+.drawer .order{
+  padding:15px;
+  border:0;border-radius:12px;
+  background:#16834a;color:#fff;
+  font:700 17px/1 var(--text);
+  cursor:pointer;
+  box-shadow:0 4px 14px rgba(22,131,74,.35);
+  transition:background .15s,transform .1s,box-shadow .15s;
+}
+.drawer .order:hover{background:#0f6a3a;box-shadow:0 6px 18px rgba(22,131,74,.45)}
+.drawer .order:active{transform:scale(.98)}
+
+/* Error / status message */
+#msg{
+  min-height:20px;
+  padding:0 22px 16px;
+  font-size:14px;
+  font-weight:500;
+  color:var(--red,#b3261e);
+  flex:none;
+}
+#msg:empty{min-height:0;padding:0}
+
+/* Basket button count pops when it changes */
+.cartbtn b{min-width:24px}
+
+/* Mobile: full-width basket */
+@media (max-width:520px){
+  .drawer{width:100%}
+  .cart-item{grid-template-columns:56px 1fr auto;gap:12px}
+  .cart-item img{width:56px;height:56px}
+}
+.card:hover{transform:translateY(-3px);box-shadow:var(--shadow-hover)}
+
+.pic{
+  position:relative;
+  aspect-ratio:4/3;
+  background:linear-gradient(160deg,var(--tile),#dce9d6);
+  display:grid;
+  place-items:center;
+  font-size:60px;
+  line-height:1;
+  overflow:hidden;
+}
+.pic img{
+  position:absolute;inset:0;
+  width:100%;height:100%;
+  object-fit:cover;
+  transition:transform .3s ease;
+}
+.card:hover .pic img{transform:scale(1.04)}
+
+.body{padding:14px 16px 16px;display:flex;flex-direction:column;flex:1}
+h3{font-size:17px;font-weight:600;line-height:1.3;margin:0}
+.body p{margin:2px 0 0;color:var(--muted);font-size:14px}
+.price{
+  font:800 22px/1 "Bricolage Grotesque","Figtree",system-ui,sans-serif;
+  color:var(--leaf-d);
+  margin:10px 0 14px;
+}
+
+/* Buttons */
+.btn,.out{
+  margin-top:auto;
+  display:block;
+  text-align:center;
+  padding:11px 12px;
+  border-radius:10px;
+  font-weight:600;
+  font-size:15px;
+  text-decoration:none;
+}
+.btn{
+  background:var(--leaf);
+  color:#fff;
+  transition:background .15s,transform .1s;
+}
+.btn:hover{background:var(--leaf-d)}
+.btn:active{transform:scale(.98)}
+.out{
+  background:#fbeceb;
+  color:var(--red);
+  cursor:not-allowed;
+}
+.card:has(.out) .pic{opacity:.5}
+
+/* How to order box */
+.info{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-left:5px solid var(--leaf);
+  border-radius:var(--radius);
+  padding:22px 24px;
+  margin:48px 0 40px;
+  box-shadow:var(--shadow);
+}
+.info h2{margin:0 0 8px;padding:0;border:0;font-size:22px}
+.info p{margin:0;color:var(--muted);max-width:70ch}
+
+/* Footer */
+footer{
+  background:var(--leaf-d);
+  color:rgba(255,255,255,.85);
+  padding:22px 0;
+  font-size:14px;
+}
+
+/* Keyboard focus */
+a:focus-visible{outline:3px solid var(--sun);outline-offset:3px;border-radius:6px}
+
+/* Phones */
+@media (max-width:600px){
+  .wrap{padding:0 14px}
+  header .wrap{height:58px}
+  .brand{font-size:21px}
+  h1{margin-top:26px}
+  .grid{grid-template-columns:repeat(2,1fr);gap:12px}
+  .body{padding:11px 12px 13px}
+  h3{font-size:15px}
+  .price{font-size:19px;margin:8px 0 12px}
+  .btn,.out{font-size:14px;padding:10px 8px}
+  .pic{font-size:46px}
+  h2{font-size:21px;margin-top:32px}
+}
+
+/* Respect reduced-motion settings */
+@media (prefers-reduced-motion:reduce){
+  *{transition:none!important;scroll-behavior:auto!important}
+  .card:hover{transform:none}
+}
+
+/* Printing */
+@media print{
+  header,nav,.btn,footer{display:none}
+  .card{box-shadow:none;break-inside:avoid}
+}

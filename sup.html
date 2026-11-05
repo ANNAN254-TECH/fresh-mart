@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>FreshMart Supermarket | Fresh groceries at fair prices</title>
+<meta name="description" content="Shop fresh produce, dairy, bakery, pantry staples and household essentials at FreshMart Supermarket.">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="sup.css">
+</head>
+<body>
+<div class="topbar"><div class="wrap"><span>Open daily: Mon to Sat 7:00 am to 9:00 pm, Sun 9:00 am to 6:00 pm</span><span>Call us: add your phone number</span></div></div>
+<header>
+  <div class="wrap">
+    <a class="brand" href="#top">FreshMart</a>
+    <nav><a href="products.html">Products and prices</a><a href="#shop">Shop</a><a href="#offers">Offers</a><a href="#visit">Visit us</a></nav>
+   <button class="cartbtn" id="openCart" aria-label="Open basket">Basket <b id="count">0</b></button>
+  </div>
+</header>
+
+<main id="top">
+  <div class="hero" id="offers">
+    <div class="wrap">
+      <div>
+        <h1>Fresh groceries, fair prices, every day.</h1>
+        <p>Shop produce, dairy, bakery and household essentials online. Order for pickup or delivery.</p>
+        <p><a href="/good.html" style="display:inline-block;background:#1f6b3a;color:#fff;padding:14px 26px;border-radius:8px;font-weight:600;font-size:17px;text-decoration:none;border:2px solid #fff">Go to products and prices</a></p>
+        <form class="search" id="searchForm" role="search">
+          <input id="q" type="search" placeholder="Search products" aria-label="Search products">
+          <button type="submit">Search</button>
+        </form>
+      </div>
+      <div class="offers" id="offerTiles"></div>
+    </div>
+  </div>
+
+  <div class="trust"><div class="wrap">
+    <div><i>🥬</i><span><b>Fresh daily</b><small>Stocked every morning</small></span></div>
+    <div><i>🚚</i><span><b>Delivery or pickup</b><small>Choose at checkout</small></span></div>
+    <div><i>💳</i><span><b>Easy payment</b><small>Pay when you receive</small></span></div>
+    <div><i>📞</i><span><b>Friendly support</b><small>We confirm every order</small></span></div>
+  </div></div>
+
+  <section id="shop">
+    <div class="wrap">
+      <div class="head">
+        <div><h2>Shop our aisles</h2><p class="sub" id="resultInfo"></p></div>
+        <div class="cats" id="cats"></div>
+      </div>
+      <div class="grid" id="grid"></div>
+      <p style="text-align:center;margin-top:24px"><a href="products.html" style="display:inline-block;background:#1f6b3a;color:#fff;padding:14px 26px;border-radius:8px;font-weight:600;font-size:17px;text-decoration:none">See all products and prices</a></p>
+    </div>
+  </section>
+
+  <section id="visit" style="padding-top:0">
+    <div class="wrap">
+      <div class="head"><h2>Visit us</h2></div>
+      <div class="info">
+        <div><h3>Opening hours</h3><p>Monday to Saturday, 7:00 am to 9:00 pm. Sunday, 9:00 am to 6:00 pm.</p></div>
+        <div><h3>Location</h3><p>Add your street address and town here.</p></div>
+        <div><h3>Contact</h3><p>Add your phone, WhatsApp and email here.</p></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="cols">
+      <div><h3>FreshMart Supermarket</h3><p>Quality food and household essentials for your family, at prices that make sense.</p></div>
+      <div><h3>Shop</h3><a href="products.html">All products and prices</a><a href="#offers">Offers</a></div>
+      <div><h3>Help</h3><a href="#visit">Opening hours</a><a href="#visit">Contact us</a></div>
+    </div>
+    <div class="copy">© <span id="year"></span> FreshMart Supermarket. All prices are in Kenyan shillings (KSh).</div>
+  </div>
+</footer>
+
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" aria-label="Your basket" aria-hidden="true">
+  <div class="dh"><h2>Your basket</h2><button class="x" id="closeCart" aria-label="Close basket">×</button></div>
+  <div id="lines"></div>
+  <div class="sum"><span>Total</span><span id="total">KSh 0</span></div>
+  <div class="form">
+    <input id="cName" placeholder="Full name" autocomplete="name" aria-label="Full name">
+    <input id="cPhone" type="tel" placeholder="Phone number" autocomplete="tel" aria-label="Phone number">
+    <select id="cMode" aria-label="Pickup or delivery"><option value="Pickup">Pickup from store</option><option value="Delivery">Delivery</option></select>
+    <input id="cAddr" placeholder="Delivery address" aria-label="Delivery address" style="display:none">
+    <button class="order" id="orderBtn">Place order</button>
+  </div>
+  <p id="msg" role="status"></p>
+</aside>
+
+<script src="script.js"></script>
+</body>
+</html>
